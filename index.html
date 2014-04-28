@@ -1,0 +1,755 @@
+<!doctype html>
+
+<!--
+    
+    So you'd like to know how to use impress.js?
+    
+    You've made the first, very important step <li>you're reading the source code.
+    And that's how impress.js presentations are built <li>with HTML and CSS code.
+    
+    Believe me, you need quite decent HTML and CSS skills to be able to use impress.js effectively.
+    And what is even more important, you need to be a designer, too, because there are no default
+    styles for impress.js presentations, there is no default or automatic layout for them.
+    
+    You need to design and build it by hand.
+    
+    So...
+    
+    Would you still like to know how to use impress.js?
+    
+-->
+
+<html lang="en">
+<head>
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=1024"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<title>Scala & Akka</title>
+
+	<meta name="description" content=""/>
+	<meta name="author" content="Jerzy Müller"/>
+
+	<link href="http://fonts.googleapis.com/css?family=Open+Sans:regular,semibold,italic,italicsemibold|PT+Sans:400,700,400italic,700italic|PT+Serif:400,700,400italic,700italic"
+	      rel="stylesheet"/>
+
+	<link href="css/impress-scala-akka.css" rel="stylesheet"/>
+
+	<script src="js/shCore.js"></script>
+	<script src="js/shBrushScala.js"></script>
+	<script src="js/shBrushJava.js"></script>
+
+	<link href="css/shCore.css" rel="stylesheet">
+	<link href="css/shThemeDefault.css" rel="stylesheet">
+
+	<link rel="icon" href="img/favicon-32.png" type="image/png">
+</head>
+
+<body class="impress-not-supported">
+
+<!--
+    For example this fallback message is only visible when there is `impress-not-supported` class on body.
+-->
+<div class="fallback-message">
+	<p>Your browser <b>doesn't support the features required</b> by impress.js, so you are presented with a simplified
+		version of this presentation.</p>
+
+	<p>For the best experience please use the latest <b>Chrome</b>, <b>Safari</b> or <b>Firefox</b> browser.</p>
+</div>
+
+<div id="impress">
+
+<div id="start" class="step slide noimage" data-x="0" data-y="0">
+	<div class="me">
+		<img src="img/virtus.png">
+	</div>
+
+	<div class="panel">
+		<h3>Scaling software with</h3>
+		<img src="img/akka.png"/>
+	</div>
+
+	<div class="me">
+		<h3>Jerzy Müller</h3>
+		<p>Scala Developer at VirtusLab</p>
+	</div>
+</div>
+
+<div id="agenda" class="step slide" data-x="1000" data-y="0">
+	<h3>Agenda</h3>
+	<ul>
+		<li>Scala programming Language</li>
+		<li>Web frameworks based on Scala</li>
+		<li>Akka, Actor framework in Scala</li>
+	</ul>
+</div>
+
+<!------------------------------------------------------------------------------------>
+
+<div id="scala" class="step slide noimage" data-x="0" data-y="1000">
+	<img id="scala-logo" src="img/scala-logo.png">
+
+	<div id="introduction">short introduction</div>
+</div>
+
+<div id="odersky" class="step slide" data-x="1000" data-y="1000">
+	<img src="img/people/martin-odersky.JPG">
+
+	<div>
+		<h3>Martin Odersky</h3>
+
+		<ul>
+			<li>worked on Pizza, GJ, Java generics and javac</li>
+			<li>in 2003 he wrote "<i>Programming in Scala</i>"</li>
+			<li>with his company, Typesafe he continue to support and improve Scala</li>
+			<li>current Scala version is 2.10 (01.2013)</li>
+		</ul>
+	</div>
+</div>
+
+<div class="step slide" data-x="2000" data-y="1000">
+	<h3>Scala is Designed!</h3>
+	<ul>
+		<li>for conciseness</li>
+		<li>for maximal type-safety</li>
+		<li>for generalized mechanism (avoid special cases)</li>
+		<li>for good functional practices</li>
+		<li>for good object-oriented practices</li>
+	</ul>
+</div>
+
+<div class="step slide noimage" data-x="3000" data-y="1000">
+	<div class="quote">
+		<img src="img/people/james-gosling.jpg">
+
+		<p>If I were to pick a language today other than Java, it would be Scala.</p>
+		<span class="author">James Gosling<span class="comment">father of Java</span></span>
+	</div>
+</div>
+
+<div class="step slide noimage" data-x="4000" data-y="1000">
+	<div class="quote">
+		<img src="img/people/james-strachan.jpg">
+
+		<p>I can honestly say if someone had shown me the Programming Scala book by Martin Odersky, Lex Spoon & Bill
+			Venners back in 2003 I'd probably have never created Groovy.</p>
+		<span class="author">James Strachan<span class="comment">creator of Groovy</span></span>
+	</div>
+</div>
+
+<div class="step slide" data-x="5000" data-y="1000">
+	<h3>Values</h3>
+	<ul>
+		<li>everything returns a value: if, for, try/catch</li>
+		<li>sometimes this value just mean nothing (Unit, ())</li>
+	</ul>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// conditionals return values
+		def abs(x: Double) = if (x >= 0) x else -x
+
+		// loops also returns values (if we want them to)
+		val squares = for (i <- 1 to 100) yield i * i
+
+		import java.io.{IOException, File, PrintWriter}
+		import java.util.Date
+
+		val writer = new PrintWriter(new File("date.txt"))
+
+		// even try/catch block returns values
+		val result = try {
+			writer.println(new Date)
+			"success"
+		} catch {
+			case e: IOException => "io exception"
+			case e: Throwable => "other exception"
+		} finally {
+			writer.close()
+		}
+	</script>
+</div>
+
+<div class="step slide" data-x="6000" data-y="1000">
+	<h3>Type system</h3>
+	<ul>
+		<li>more powerful than Java (and even than haskell), yet less type-related boilerplate</li>
+		<li>high-level constructs like variance for generics</li>
+		<li>types are inferred almost everywhere!
+			<ul>
+				<li>but you can still provide types wherever you want to</li>
+				<li>you have to provide types for method parameters</li>
+				<li>and return types for recursive functions</li>
+			</ul>
+		</li>
+	</ul>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// inferred type: String
+		val name = "John"
+
+		// inferred type: Map[String, Map[String, List[Int]]]
+		var marks = Map(name ->
+				Map("Geography" -> List(5, 6, 5),
+					"Biology" -> List(1, 2, 1)))
+
+		// explicit parameter and return type needed
+		def factorial(n: Int): Int =
+			if (n == 0) 1 else n * factorial(n - 1)
+	</script>
+</div>
+
+<div class="step slide" data-x="7000" data-y="1000">
+	<h3>Objects</h3>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// primary constructor
+		class Complex(val r: Double, val i: Double) {
+
+			// method - NOT an overloaded operator
+			def +(other: Complex) =
+				new Complex(this.r + other.r, this.i + other.i)
+
+			// override is necessary
+			override def toString = s"Complex($r, $i)"
+		}
+
+		// syntactic sugar for complex.+(new Complex(3, 4))
+		complex + new Complex(3, 4)
+
+		// > Complex(4, 6)
+
+		// companion object - place all "static" method here
+		object Complex {
+			def create(r: Double, i: Double): Complex = new Complex(r, i)
+
+			val Zero = new Complex()
+		}
+
+		Complex.create(1, 2) // > Complex(1, 2)
+	</script>
+</div>
+
+<div class="step slide" data-x="8000" data-y="1000">
+	<h3>Inheritance model</h3>
+	<ul>
+		<li>single inheritance with Classes</li>
+		<li>multiple inheritance with Traits</li>
+		<li><b>super</b> calls are linearized (no diamond problem)</li>
+		<li>great solution for re-usage of behaviour</li>
+	</ul>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		import java.util.logging.Logger
+
+		trait Loggable {
+			val logger: Logger = Logging.getLogger(this)
+		}
+
+		abstract class BaseEntity {
+			// some important methods
+		}
+
+		class User extends BaseEntity with Loggable {
+			logger.info("User created!")
+		}
+	</script>
+</div>
+
+<div class="step slide" data-x="9000" data-y="1000">
+	<h3>Functions</h3>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// standard version for one parameter
+		val inc: Int => Int =
+			(x: Int) => x + 1
+
+		// multiple parameters
+		val print: (Int, Int) => String =
+			(x: Int, y: Int) => "(" + x + ", " + y + ")"
+
+		// no parameters
+		val hello: () => String =
+			() => {
+				System.getProperty("user.dir")
+			}
+
+		(i: Numeric) => i % 2 == 0
+
+		// is translated into
+
+		new Function1[Numeric, Boolean] {
+			// syntactic sugar, you can call apply() method using only ()
+			def apply(i: Numeric): Boolean = i % 2 == 0
+		}
+	</script>
+</div>
+
+<div class="step slide" data-x="10000" data-y="1000">
+	<h3>Functions & collections</h3>
+	<ul>
+		<li>Scala collections comes with huge amount of higher-order methods</li>
+		<li>Each of these typically takes some function as parameter</li>
+		<li>These methods offers concise syntax for very complex operations</li>
+	</ul>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		case class User(name: String, age: Int)
+
+		val users = List(User("Jerzy", 24), User("Kuba", 16))
+
+		// split collection in two by predicate
+		val (minors, adults) = users partition (user => user.age < 18)
+
+		// calc. squares of numbers divisible by 3 in range from 1 to 100
+		val num = (1 to 100) filter (i => i % 3 == 0) map (i => i * i)
+
+		// print result
+		num foreach (i => println(i))
+
+		// you can replace single appearance of parameter with _
+		num foreach (println _)
+	</script>
+</div>
+
+<div class="step slide" data-x="11000" data-y="1000">
+	<h3>Immutability</h3>
+	<ul>
+		<li>val instead of var</li>
+		<li>Immutable persistent data structures (very efficient "copying")</li>
+		<li>Killer feature in concurrent programs</li>
+	</ul>
+
+	<img src="img/clojure-trees.png"/>
+</div>
+
+<div class="step slide" data-x="12000" data-y="1000">
+	<h3>Scala encourages extensibility</h3>
+
+	<p>Most of Scala language features provides extension points for users to plug in.</p>
+</div>
+
+<div class="step slide" data-x="13000" data-y="1000">
+	<h3>Pattern matching</h3>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// you can pattern match on case classes
+		case class Email(user: String, domain: String)
+
+		val email: Email = ???
+
+		email match {
+			case EMail(user, domain) => println(user + " AT " + domain)
+			case _ => println("not an email address")
+		}
+
+		// but when you declare custom extraction method:
+		object EMail {
+			def unapply(str: String): Option[(String, String)] = {
+				val parts = str split "@"
+				if (parts.length == 2) Some(parts(0), parts(1)) else None
+			}
+		}
+
+		// then you can extract from anything you want
+
+		val emailAsString: String =
+
+			emailAsString match {
+				case EMail(user, domain) => println(user + " AT " + domain)
+				case _ => println("not an email address")
+			}
+	</script>
+</div>
+
+<div class="step slide" data-x="14000" data-y="1000">
+	<h3>String interpolation</h3>
+	<ul>
+		<li>easy way to format your strings</li>
+		<li>or to create regular expressions</li>
+		<li>or to do anything you want (parse to xml, json etc.)</li>
+	</ul>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// The &apos;s&apos; String Interpolator
+		val name = "James"
+		println(s"Hello, $name") // Hello, James
+		println(s"1 + 1 = ${1 + 1}")
+
+		// The &apos;f&apos; Interpolator
+		val height = 1.9d
+		println(f"$name%s is $height%2.2f meters tall")
+		// James is 1.90 meters tall
+
+		// The &apos;raw&apos; Interpolator
+		raw"a\nb" // a\nb
+
+		// call to:
+		json"{ name: $name, id: $id }"
+
+		// gets translated to:
+		new StringContext("{ name:", ",id: ", "}").json(name, id)
+	</script>
+</div>
+
+<div class="step slide" data-x="15000" data-y="1000">
+	<h3>Typeclasses</h3>
+	<ul>
+		<li>decouple (some) context-dependent behavior from data</li>
+		<li>automatically used when in scope (implicit arguments)</li>
+		<li>they are pattern that virtually every Java programmer used</li>
+	</ul>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// method for calculating max:
+		val numbers = Seq(1, 3, 5, 6, 72)
+
+		numbers.max
+
+		// 72
+
+		case class User(name: String, age: Int)
+
+		val users = Seq(User("Jerzy", 25),
+			User("Krzysiek", 23),
+			User("Jakub", 16))
+
+		users.max
+
+		// does not compile!
+
+		// why? max takes implicit parameter and compiler does not
+		// found one for User class
+		trait Seq[A] {
+			def max[B >: A](implicit cmp: Ordering[B]): A
+		}
+
+		// but we can provide one:
+		implicit val userOrdering = Ordering[User].on(_.age)
+
+		users.max // User("Jerzy", 25)
+	</script>
+</div>
+
+<div class="step slide" data-x="16000" data-y="1000">
+	<h3>Macros</h3>
+	<ul>
+		<li>code that compiles to another code (like LISP macros)</li>
+		<li>Type-safe!</li>
+		<li>extend language any way you want!</li>
+	</ul>
+</div>
+
+<!------------------------------------------------------------------------------------>
+
+<div class="step slide" data-x="0" data-y="2000">
+	<div class="header">Web frameworks</div>
+</div>
+
+<div class="step slide" data-x="1000" data-y="2000">
+	<img src="img/lift.png">
+	<ul>
+		<li>mature</li>
+		<li>fully in Scala</li>
+		<li>stateful</li>
+		<li>comes with ORM</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="2000" data-y="2000">
+	<h3>Designer Friendly Templates</h3>
+	<ul>
+		<li>templates in pure, plain HTML (HTML5 or XHTML)</li>
+		<li>all framework-specific stuff are added in "class" parameters</li>
+		<li>binding are done using well-known CSS selectors</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="3000" data-y="2000">
+	<img src="img/play.png" style="height: 60px;">
+	<ul>
+		<li>full stack framework</li>
+		<li>written in Scala (since 2.0), interfaces in Java & Scala</li>
+		<li>type safe</li>
+		<li>stateless</li>
+		<li>concise and elegant</li>
+		<li>built-in integration with LESS, coffeescript, Akka, cache providers etc.</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="4000" data-y="2000">
+	<h3>Embrace the web!</h3>
+	<ul>
+		<li>HTTP</li>
+		<li>Asynchronous communication</li>
+		<li>stateless
+		<li>all session-related state is stored in cookies</li>
+	</ul>
+</div>
+
+<!------------------------------------------------------------------------------------>
+
+<div class="step slide" data-x="0" data-y="3000">
+	<img src="img/akka.png"/>
+
+	<h3>Build powerful concurrent & distributed applications more easily.</h3>
+</div>
+
+<div class="step slide" data-x="1000" data-y="3000">
+	<h3>Actor model - the beginning</h3>
+
+	<p>Carl Hewitt’s actor definition (in early 1970s)</p>
+	<br>
+
+	<p>The fundamental unit of computation that embodies:</p>
+	<ul>
+		<li>Processing</li>
+		<li>Storage</li>
+		<li>Communication</li>
+	</ul>
+	<br>
+
+	<p>3 axioms - When an Actor receives a message it can:</p>
+	<ul>
+		<li>Create new Actors</li>
+		<li>Send messages to Actors it knows</li>
+		<li>Designate how it should handle the next message it receives</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="2000" data-y="3000">
+	<h3>Program at a Higher Level</h3>
+
+	<ul>
+		<li>
+			Never think in terms of shared state, state
+			visibility, threads, locks, concurrent collections,
+			thread notifications etc.
+		</li>
+		<li>
+			Low level concurrency plumbing BECOMES
+			SIMPLE WORKFLOW - you only think about how
+			messages flow in the system
+		</li>
+		<li>
+			You get high CPU utilization, low latency, high
+			throughput and scalability - FOR FREE as part of
+			the model
+		</li>
+		<li>
+			Proven and superior model for detecting and
+			recovering from errors
+		</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="3000" data-y="3000">
+	<h3>Actor</h3>
+
+	<p>An actor is a computational entity that, in response to a message it receives, can concurrently:</p>
+	<ul>
+		<li>send a finite number of messages to other actors</li>
+		<li>create a finite number of new actors</li>
+		<li>designate the behavior to be used for the next message it receives</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="4000" data-y="3000">
+	<h3>Actor in Akka</h3>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// DEFINE Actor
+		case class Greeting(who: String)
+
+		class GreetingActor extends Actor with ActorLogging {
+			def receive = {
+				case Greeting(who) => log.info("Hello " + who)
+			}
+		}
+
+		// CREATE Actor
+		val system = ActorSystem("MySystem")
+		val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
+
+		// SEND message to Actor
+		greeter ! Greeting("KI AGH")
+	</script>
+</div>
+
+<div class="step slide" data-x="5000" data-y="3000">
+	<h3>Messages in Akka</h3>
+
+	<img src="img/akka/actor-system.png">
+
+	<div class="source">Source: Akka in Action MEAP, Manning 2013</div>
+</div>
+
+<div class="step slide" data-x="6000" data-y="3000">
+	<h3>Actor's lifecycle</h3>
+	<ul>
+		<li>creating</li>
+		<li>starting</li>
+		<li>restarts => supervision!</li>
+		<li>shutting down</li>
+	</ul>
+
+	<img src="img/akka/actor-lifecycle.png">
+</div>
+
+<div class="step slide" data-x="7000" data-y="3000">
+	<h3>Actor hierarchy</h3>
+
+	<img src="img/akka/actor-hierarchy.png">
+</div>
+
+<div class="step slide" data-x="8000" data-y="3000">
+	<h3>Supervision</h3>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		class Supervisor extends Actor {
+			override val supervisorStrategy =
+				OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+					case _: ArithmeticException => Resume
+					case _: NullPointerException => Restart
+					case _: Exception => Escalate
+				}
+			val worker = context.actorOf(Props[Worker])
+
+			def receive = {
+				case n: Int => worker forward n
+			}
+		}
+	</script>
+</div>
+
+<div class="step slide" data-x="9000" data-y="3000">
+	<h3>Testing Actors</h3>
+	<ul>
+		<li>Akka provides excellent test framework</li>
+		<li>You can:
+			<ul>
+				<li>run your actors on just one thread</li>
+				<li>get direct reference to tested actors</li>
+				<li>check what messages and of what types actor gets (mocking)</li>
+				<li>or even run multi-jvm test suites (advanced)</li>
+			</ul>
+		</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="10000" data-y="3000">
+	<h3>Futures</h3>
+	<ul>
+		<li>Calculation postponed in time</li>
+		<li>Enables cool ways for doing concurrent programming</li>
+	</ul>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// Asking actor
+		implicit val t = Timeout(5 seconds)
+		val future = actor ? msg // enabled by the “ask” import
+		val result = Await.result(future, t.duration).asInstanceOf[String]
+
+		// or use them in for comprehensions
+		val f1 = actor1 ? msg1
+		val f2 = actor2 ? msg2
+
+		val f3 = for {
+			a ← f1.mapTo[Int]
+			b ← f2.mapTo[Int]
+			c ← (actor3 ? (a + b)).mapTo[Int]
+		} yield c
+
+		val result = Await.result(f3, 1 second).asInstanceOf[Int]
+	</script>
+</div>
+
+<div class="step slide" data-x="11000" data-y="3000">
+	<h3>STM: Agents and Transactors</h3>
+	<ul>
+		<li>inspired by agents in Clojure</li>
+		<li>provides asynchronous change of individual locations</li>
+		<li>read operation from agent is synchronous</li>
+		<li>if you enclose change in transaction Akka will use STM to ensure that all or none of changes will be executed</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="12000" data-y="3000">
+	<div class="header">Akka extensions</div>
+</div>
+
+<div class="step slide" data-x="13000" data-y="3000">
+	<h3>Integration with Camel</h3>
+
+	<p>Consumer:</p>
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		class MyConsumer extends Consumer {
+			def endpointUri = "jetty:http://localhost:8877/camel/default"
+
+			def receive = {
+				case msg: CamelMessage ⇒
+					println("received %s" format msg.bodyAs[String])
+			}
+		}
+	</script>
+	<p>Producer:</p>
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		class OrderActor extends Actor with Producer with Oneway {
+			def endpointUri = "jms:queue:Orders"
+		}
+
+		val system = ActorSystem("some-system")
+		val orderActor = system.actorOf(Props[OrderActor])
+
+		orderActor ! <order amount="42" currency="EUR" itemId="9"/>
+	</script>
+</div>
+
+<div class="step slide" data-x="14000" data-y="3000">
+	<h3>Durable mailboxes</h3>
+
+	<p>Based on top of:</p>
+	<ul>
+		<li>File system
+		<li>Redis
+		<li>MongoDB
+		<li>Beanstalk
+		<li>ZooKeeper</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="15000" data-y="3000">
+	<h3>Clustering support</h3>
+	<ul>
+		<li>Gossip-based Cluster Membership</li>
+		<li>Accrual Failure Detector</li>
+		<li>Cluster DeathWatch</li>
+		<li>Cluster-Aware Routers</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="0" data-y="4000">
+	<div class="header">Questions?</div>
+</div>
+
+<div id="overview" class="step" data-x="8000" data-y="1500" data-scale="12">
+</div>
+
+</div>
+
+<script type="text/javascript">
+	SyntaxHighlighter.all()
+</script>
+
+<div class="hint">
+	<p>Use a spacebar or arrow keys to navigate</p>
+</div>
+<script>
+	if ("ontouchstart" in document.documentElement) {
+		document.querySelector(".hint").innerHTML = "<p>Tap on the left or right to navigate</p>";
+	}
+</script>
+
+<script src="js/impress.js"></script>
+<script>impress().init();</script>
+
+</body>
+</html>
