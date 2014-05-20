@@ -71,6 +71,7 @@
 	<div class="me">
 		<h3>Jerzy Müller</h3>
 		<p>Scala Developer at VirtusLab</p>
+		<p><img src="img/GitHub-Mark-32px.png"/><a href="http://github.com/VirtusLab/talk-scala-akka-play" target="_blank"> / VirtusLab / talk-scala-akka-play</a></p>
 	</div>
 </div>
 
@@ -92,7 +93,7 @@
 </div>
 
 <div id="odersky" class="step slide" data-x="1000" data-y="1000">
-	<img src="img/people/martin-odersky.JPG">
+	<img src="img/people/martin-odersky.jpg">
 
 	<div>
 		<h3>Martin Odersky</h3>
@@ -101,7 +102,7 @@
 			<li>worked on Pizza, GJ, Java generics and javac</li>
 			<li>in 2003 he wrote "<i>Programming in Scala</i>"</li>
 			<li>with his company, Typesafe he continue to support and improve Scala</li>
-			<li>current Scala version is 2.10 (01.2013)</li>
+			<li>current Scala version is 2.11 (05.2014)</li>
 		</ul>
 	</div>
 </div>
@@ -351,12 +352,12 @@
 
 		// then you can extract from anything you want
 
-		val emailAsString: String =
+		val emailAsString: String = ???
 
-			emailAsString match {
-				case EMail(user, domain) => println(user + " AT " + domain)
-				case _ => println("not an email address")
-			}
+		emailAsString match {
+			case EMail(user, domain) => println(user + " AT " + domain)
+			case _ => println("not an email address")
+		}
 	</script>
 </div>
 
