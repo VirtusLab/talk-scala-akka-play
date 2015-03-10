@@ -69,7 +69,7 @@
 	</div>
 
 	<div class="me">
-		<h3>Jerzy Müller</h3>
+		<h3>Piotr Kukiełka</h3>
 		<p>Scala Developer at VirtusLab</p>
 		<p><img src="img/GitHub-Mark-32px.png"/><a href="http://github.com/VirtusLab/talk-scala-akka-play" target="_blank"> / VirtusLab / talk-scala-akka-play</a></p>
 	</div>
@@ -102,7 +102,7 @@
 			<li>worked on Pizza, GJ, Java generics and javac</li>
 			<li>in 2003 he wrote "<i>Programming in Scala</i>"</li>
 			<li>with his company, Typesafe he continue to support and improve Scala</li>
-			<li>current Scala version is 2.11 (05.2014)</li>
+			<li>current Scala version is 2.11.6 (03.2015)</li>
 		</ul>
 	</div>
 </div>
@@ -220,12 +220,12 @@
 
 		// companion object - place all "static" method here
 		object Complex {
-			def create(r: Double, i: Double): Complex = new Complex(r, i)
+			def apply(r: Double, i: Double): Complex = new Complex(r, i)
 
-			val Zero = new Complex()
+			val Zero = new Complex(0, 0)
 		}
 
-		Complex.create(1, 2) // > Complex(1, 2)
+		Complex(1, 2) // > Complex(1, 2)
 	</script>
 </div>
 
@@ -301,7 +301,7 @@
 		val (minors, adults) = users partition (user => user.age < 18)
 
 		// calc. squares of numbers divisible by 3 in range from 1 to 100
-		val num = (1 to 100) filter (i => i % 3 == 0) map (i => i * i)
+		val num = (1 to 100) filter (_ % 3 == 0) map (i => i * i)
 
 		// print result
 		num foreach (i => println(i))
@@ -355,7 +355,7 @@
 		val emailAsString: String = ???
 
 		emailAsString match {
-			case EMail(user, domain) => println(user + " AT " + domain)
+			case Email(user, domain) => println(user + " AT " + domain)
 			case _ => println("not an email address")
 		}
 	</script>
@@ -460,7 +460,7 @@
 	<ul>
 		<li>templates in pure, plain HTML (HTML5 or XHTML)</li>
 		<li>all framework-specific stuff are added in "class" parameters</li>
-		<li>binding are done using well-known CSS selectors</li>
+		<li>binding is done using well-known CSS selectors</li>
 	</ul>
 </div>
 
@@ -557,9 +557,10 @@
 	<h3>Actor in Akka</h3>
 
 	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
-		// DEFINE Actor
+		// DEFINE message
 		case class Greeting(who: String)
 
+		// DEFINE Actor
 		class GreetingActor extends Actor with ActorLogging {
 			def receive = {
 				case Greeting(who) => log.info("Hello " + who)
@@ -568,7 +569,9 @@
 
 		// CREATE Actor
 		val system = ActorSystem("MySystem")
-		val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
+		val greeter = system.actorOf(
+			Props[GreetingActor],
+			name = "greeter")
 
 		// SEND message to Actor
 		greeter ! Greeting("KI AGH")
