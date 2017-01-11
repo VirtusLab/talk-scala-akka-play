@@ -69,7 +69,7 @@
 	</div>
 
 	<div class="me">
-		<h3>Jerzy Müller</h3>
+		<h3>Krzysztof Romanowski</h3>
 		<p>Scala Developer at VirtusLab</p>
 		<p><img src="img/GitHub-Mark-32px.png"/><a href="http://github.com/VirtusLab/talk-scala-akka-play" target="_blank"> / VirtusLab / talk-scala-akka-play</a></p>
 	</div>
@@ -102,7 +102,7 @@
 			<li>worked on Pizza, GJ, Java generics and javac</li>
 			<li>in 2003 he wrote "<i>Programming in Scala</i>"</li>
 			<li>with his company, Typesafe he continue to support and improve Scala</li>
-			<li>current Scala version is 2.11 (05.2014)</li>
+			<li>current Scala version is 2.12.1 (12.2016)</li>
 		</ul>
 	</div>
 </div>
@@ -127,7 +127,7 @@
 	</div>
 </div>
 
-<div class="step slide noimage" data-x="4000" data-y="1000">
+<div class="step slide noimage" data-x="3000" data-y="0">
 	<div class="quote">
 		<img src="img/people/james-strachan.jpg">
 
@@ -135,6 +135,18 @@
 			Venners back in 2003 I'd probably have never created Groovy.</p>
 		<span class="author">James Strachan<span class="comment">creator of Groovy</span></span>
 	</div>
+</div>
+
+<div class="step slide" data-x="4000" data-y="0">
+		<img src="img/love-scala.png">
+
+		http://stackoverflow.com/research/developer-survey-2016
+</div>
+
+<div class="step slide" data-x="4000" data-y="1000">
+		<img src="img/scala-salary.png">
+
+		http://stackoverflow.com/research/developer-survey-2016
 </div>
 
 <div class="step slide" data-x="5000" data-y="1000">
@@ -170,35 +182,6 @@
 </div>
 
 <div class="step slide" data-x="6000" data-y="1000">
-	<h3>Type system</h3>
-	<ul>
-		<li>more powerful than Java (and even than haskell), yet less type-related boilerplate</li>
-		<li>high-level constructs like variance for generics</li>
-		<li>types are inferred almost everywhere!
-			<ul>
-				<li>but you can still provide types wherever you want to</li>
-				<li>you have to provide types for method parameters</li>
-				<li>and return types for recursive functions</li>
-			</ul>
-		</li>
-	</ul>
-
-	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
-		// inferred type: String
-		val name = "John"
-
-		// inferred type: Map[String, Map[String, List[Int]]]
-		var marks = Map(name ->
-				Map("Geography" -> List(5, 6, 5),
-					"Biology" -> List(1, 2, 1)))
-
-		// explicit parameter and return type needed
-		def factorial(n: Int): Int =
-			if (n == 0) 1 else n * factorial(n - 1)
-	</script>
-</div>
-
-<div class="step slide" data-x="7000" data-y="1000">
 	<h3>Objects</h3>
 
 	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
@@ -220,16 +203,39 @@
 
 		// companion object - place all "static" method here
 		object Complex {
-			def create(r: Double, i: Double): Complex = new Complex(r, i)
+			def apply(r: Double, i: Double): Complex = new Complex(r, i)
 
-			val Zero = new Complex()
+			val Zero = new Complex(0, 0)
 		}
 
-		Complex.create(1, 2) // > Complex(1, 2)
+		Complex(1, 2) // > Complex(1, 2)
 	</script>
 </div>
 
-<div class="step slide" data-x="8000" data-y="1000">
+<div class="step slide" data-x="6000" data-y="0">
+	<h3>Case classes</h3>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+	case class User(name: String, surname: String)
+
+	// Eqivalent of
+	class User(val name: String, surname: String){
+		override def def toString = "User($name, $surname)"
+		def copy(newName: String = name, newSurname: String = surname) =
+			new User(newName, newSurname)
+		// and more including equals and hashCode base on parameters
+	}
+	object User {
+		def apply(val name: String, surname: String) = new User(mame, surname)
+
+		// to make pattern mach work, later on
+		def unapply(from: Any): Option[(String, String) = ...
+	}
+
+	</script>
+</div>
+
+<div class="step slide" data-x="7000" data-y="1000">
 	<h3>Inheritance model</h3>
 	<ul>
 		<li>single inheritance with Classes</li>
@@ -255,6 +261,34 @@
 	</script>
 </div>
 
+	<div class="step slide" data-x="8000" data-y="1000">
+		<h3>Type system</h3>
+		<ul>
+			<li>more powerful than Java (and even than haskell), yet less type-related boilerplate</li>
+			<li>high-level constructs like variance for generics</li>
+			<li>types are inferred almost everywhere!
+				<ul>
+					<li>but you can still provide types wherever you want to</li>
+					<li>you have to provide types for method parameters</li>
+					<li>and return types for recursive functions</li>
+				</ul>
+			</li>
+		</ul>
+
+		<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		// inferred type: String
+		val name = "John"
+
+		// inferred type: Map[String, Map[String, List[Int]]]
+		var marks = Map(name ->
+				Map("Geography" -> List(5, 6, 5),
+					"Biology" -> List(1, 2, 1)))
+
+		// explicit parameter and return type needed
+		def factorial(n: Int): Int =
+			if (n == 0) 1 else n * factorial(n - 1)
+	</script>
+	</div>
 <div class="step slide" data-x="9000" data-y="1000">
 	<h3>Functions</h3>
 
@@ -285,6 +319,30 @@
 </div>
 
 <div class="step slide" data-x="10000" data-y="1000">
+	<h3>Functions</h3>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+	// you can use both def and val (of type function)
+	val inc = (x: Int) => x + 1
+	def dec(i: Int): Int = i - 1
+
+	Seq(1, 2, 3).map(inc) // Seq(2, 3, 4)
+	Seq(1, 2, 3).map(dec) // Seq(0, 1, 2)
+
+
+	// Currying
+	def mulBy(multiplier: Int)(value: Int) = multiplier * value
+	Seq(1, 2, 3).map(mulBy(4))
+
+	// Lambdas
+	Seq(1, 2, 3).map(_ * 4)
+	// or even
+	Seq(1, 2, 3).map(4 * )
+
+</script>
+</div>
+
+<div class="step slide" data-x="10000" data-y="0">
 	<h3>Functions & collections</h3>
 	<ul>
 		<li>Scala collections comes with huge amount of higher-order methods</li>
@@ -301,7 +359,7 @@
 		val (minors, adults) = users partition (user => user.age < 18)
 
 		// calc. squares of numbers divisible by 3 in range from 1 to 100
-		val num = (1 to 100) filter (i => i % 3 == 0) map (i => i * i)
+		val num = (1 to 100) filter (_ % 3 == 0) map (i => i * i)
 
 		// print result
 		num foreach (i => println(i))
@@ -323,13 +381,66 @@
 </div>
 
 <div class="step slide" data-x="12000" data-y="1000">
-	<h3>Scala encourages extensibility</h3>
+	<h3>Typeclasses</h3>
+	<ul>
+		<li>decouple (some) context-dependent behavior from data</li>
+		<li>automatically used when in scope (implicit arguments)</li>
+		<li>they are pattern that virtually every Java programmer used</li>
+	</ul>
 
-	<p>Most of Scala language features provides extension points for users to plug in.</p>
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+	// method for calculating max:
+	val numbers = Seq(1, 3, 5, 6, 72)
+
+	numbers.max
+
+	// 72
+
+	case class User(name: String, age: Int)
+
+	val users = Seq(User("Jerzy", 25),
+		User("Krzysiek", 23),
+		User("Jakub", 16))
+
+	users.max
+
+	// does not compile!
+
+	// why? max takes implicit parameter and compiler does not
+	// found one for User class
+	trait Seq[A] {
+		def max[B >: A](implicit cmp: Ordering[B]): A
+	}
+
+	// but we can provide one:
+	implicit val userOrdering = Ordering[User].on(_.age)
+
+	users.max // User("Jerzy", 25)
+</script>
 </div>
 
 <div class="step slide" data-x="13000" data-y="1000">
 	<h3>Pattern matching</h3>
+
+	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
+		def receive(msg: Any): String = msg match { // Any is any type including primitives!
+			case 1 => "Got 1" // match literals
+			case nr: Int => s"Got integer: $nr"// match specific type
+			case d: Double if d > 2 => s"Got double > 2: $d" // coditions
+			case User(name, addres) => s"Got user $name from $address" // deconstrutcion of data structure
+			case room @ Room(floorNo: Int, _) if floorNo > 2 => "Got room $room" // All can be mixed
+			case _ => "Unknown" // default case
+		}
+	</script>
+</div>
+<div class="step slide" data-x="13000" data-y="0">
+	<h3>There is no special cases!</h3>
+
+	<p>Most of Scala language features can be implemented inside your scala code!</p>
+</div>
+
+<div class="step slide" data-x="14000" data-y="1000">
+	<h3>Custom pattern matching</h3>
 
 	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
 		// you can pattern match on case classes
@@ -355,13 +466,13 @@
 		val emailAsString: String = ???
 
 		emailAsString match {
-			case EMail(user, domain) => println(user + " AT " + domain)
+			case Email(user, domain) => println(user + " AT " + domain)
 			case _ => println("not an email address")
 		}
 	</script>
 </div>
 
-<div class="step slide" data-x="14000" data-y="1000">
+<div class="step slide" data-x="15000" data-y="1000">
 	<h3>String interpolation</h3>
 	<ul>
 		<li>easy way to format your strings</li>
@@ -388,45 +499,6 @@
 
 		// gets translated to:
 		new StringContext("{ name:", ",id: ", "}").json(name, id)
-	</script>
-</div>
-
-<div class="step slide" data-x="15000" data-y="1000">
-	<h3>Typeclasses</h3>
-	<ul>
-		<li>decouple (some) context-dependent behavior from data</li>
-		<li>automatically used when in scope (implicit arguments)</li>
-		<li>they are pattern that virtually every Java programmer used</li>
-	</ul>
-
-	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
-		// method for calculating max:
-		val numbers = Seq(1, 3, 5, 6, 72)
-
-		numbers.max
-
-		// 72
-
-		case class User(name: String, age: Int)
-
-		val users = Seq(User("Jerzy", 25),
-			User("Krzysiek", 23),
-			User("Jakub", 16))
-
-		users.max
-
-		// does not compile!
-
-		// why? max takes implicit parameter and compiler does not
-		// found one for User class
-		trait Seq[A] {
-			def max[B >: A](implicit cmp: Ordering[B]): A
-		}
-
-		// but we can provide one:
-		implicit val userOrdering = Ordering[User].on(_.age)
-
-		users.max // User("Jerzy", 25)
 	</script>
 </div>
 
@@ -460,7 +532,7 @@
 	<ul>
 		<li>templates in pure, plain HTML (HTML5 or XHTML)</li>
 		<li>all framework-specific stuff are added in "class" parameters</li>
-		<li>binding are done using well-known CSS selectors</li>
+		<li>binding is done using well-known CSS selectors</li>
 	</ul>
 </div>
 
@@ -495,28 +567,6 @@
 </div>
 
 <div class="step slide" data-x="1000" data-y="3000">
-	<h3>Actor model - the beginning</h3>
-
-	<p>Carl Hewitt’s actor definition (in early 1970s)</p>
-	<br>
-
-	<p>The fundamental unit of computation that embodies:</p>
-	<ul>
-		<li>Processing</li>
-		<li>Storage</li>
-		<li>Communication</li>
-	</ul>
-	<br>
-
-	<p>3 axioms - When an Actor receives a message it can:</p>
-	<ul>
-		<li>Create new Actors</li>
-		<li>Send messages to Actors it knows</li>
-		<li>Designate how it should handle the next message it receives</li>
-	</ul>
-</div>
-
-<div class="step slide" data-x="2000" data-y="3000">
 	<h3>Program at a Higher Level</h3>
 
 	<ul>
@@ -542,6 +592,29 @@
 	</ul>
 </div>
 
+
+<div class="step slide" data-x="2000" data-y="3000">
+	<h3>Actor model - the beginning</h3>
+
+	<p>Carl Hewitt’s actor definition (in early 1970s)</p>
+	<br>
+
+	<p>The fundamental unit of computation that embodies:</p>
+	<ul>
+		<li>Processing</li>
+		<li>Storage</li>
+		<li>Communication</li>
+	</ul>
+	<br>
+
+	<p>3 axioms - When an Actor receives a message it can:</p>
+	<ul>
+		<li>Create new Actors</li>
+		<li>Send messages to Actors it knows</li>
+		<li>Designate how it should handle the next message it receives</li>
+	</ul>
+</div>
+
 <div class="step slide" data-x="3000" data-y="3000">
 	<h3>Actor</h3>
 
@@ -557,9 +630,10 @@
 	<h3>Actor in Akka</h3>
 
 	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
-		// DEFINE Actor
+		// DEFINE message
 		case class Greeting(who: String)
 
+		// DEFINE Actor
 		class GreetingActor extends Actor with ActorLogging {
 			def receive = {
 				case Greeting(who) => log.info("Hello " + who)
@@ -568,7 +642,9 @@
 
 		// CREATE Actor
 		val system = ActorSystem("MySystem")
-		val greeter = system.actorOf(Props[GreetingActor], name = "greeter")
+		val greeter = system.actorOf(
+			Props[GreetingActor],
+			name = "greeter")
 
 		// SEND message to Actor
 		greeter ! Greeting("KI AGH")
@@ -596,12 +672,6 @@
 </div>
 
 <div class="step slide" data-x="7000" data-y="3000">
-	<h3>Actor hierarchy</h3>
-
-	<img src="img/akka/actor-hierarchy.png">
-</div>
-
-<div class="step slide" data-x="8000" data-y="3000">
 	<h3>Supervision</h3>
 
 	<script type="syntaxhighlighter" class="brush: scala, gutter: false">
@@ -621,6 +691,12 @@
 	</script>
 </div>
 
+<div class="step slide" data-x="8000" data-y="3000">
+	<h3>Actor hierarchy</h3>
+
+	<img src="img/akka/actor-hierarchy.png">
+</div>
+
 <div class="step slide" data-x="9000" data-y="3000">
 	<h3>Testing Actors</h3>
 	<ul>
@@ -637,7 +713,7 @@
 </div>
 
 <div class="step slide" data-x="10000" data-y="3000">
-	<h3>Futures</h3>
+	<h3>Actor and futures Futures</h3>
 	<ul>
 		<li>Calculation postponed in time</li>
 		<li>Enables cool ways for doing concurrent programming</li>
@@ -664,12 +740,11 @@
 </div>
 
 <div class="step slide" data-x="11000" data-y="3000">
-	<h3>STM: Agents and Transactors</h3>
+	<h3>Is Akka fast and light enough?</h3>
 	<ul>
-		<li>inspired by agents in Clojure</li>
-		<li>provides asynchronous change of individual locations</li>
-		<li>read operation from agent is synchronous</li>
-		<li>if you enclose change in transaction Akka will use STM to ensure that all or none of changes will be executed</li>
+		<li>50 million msg/sec on a single machine.</li>
+		<li>Small memory footprint; ~2.5 million actors per GB of heap.</li>
+		<li>More: <a href="http://letitcrash.com/post/20397701710/50-million-messages-per-second-on-a-single">letitcrash.com</a></li>
 	</ul>
 </div>
 
@@ -727,7 +802,38 @@
 	</ul>
 </div>
 
+<div class="step slide" data-x="16000" data-y="3000">
+	<h3>Akka Streams</h3>
+	<ul>
+		<li>Currently we process too much data to store in single machine.</li>
+		<li>Big data - way too heavy</li>
+		<li>Process data on the fly and send it further.</li>
+		<li>Light, simple, reliable</li>
+		<li><a href="http://www.reactive-streams.org/">www.reactive-streams.org/</a> (Backpressure!)</li>
+		<li><a href="http://www.reactivemanifesto.org/">www.reactivemanifesto.org/</a></li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="17000" data-y="3000">
+	<h3>Change of votes on Stackoverflow</h3>
+	between January 2015 and January 2016
+
+	<img src="img/treding.png">
+
+	http://stackoverflow.com/research/developer-survey-2016
+</div>
+
 <div class="step slide" data-x="0" data-y="4000">
+	<h3>Spark</h3>
+	<ul>
+		<li>Data processing framework</li>
+		<li>In Scala</li>
+		<li>Everybody wants it.</li>
+		<li>Not in scope of this presentation.</li>
+	</ul>
+</div>
+
+<div class="step slide" data-x="0" data-y="5000">
 	<div class="header">Questions?</div>
 </div>
 
